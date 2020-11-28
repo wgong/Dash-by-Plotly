@@ -1,3 +1,6 @@
+"""
+https://www.youtube.com/watch?v=Kr94sFOWUMg
+"""
 import pandas as pd     #(version 1.0.0)
 import plotly           #(version 4.5.0)
 import plotly.express as px
@@ -11,7 +14,7 @@ app = dash.Dash(__name__)
 
 #---------------------------------------------------------------
 
-df = pd.read_csv("DOHMH_New_York_City_Restaurant_Inspection_Results.csv")
+df = pd.read_csv("DOHMH_New_York_City_Restaurant_Inspection_Results.csv.gz", compression='gzip')
 df['INSPECTION DATE'] = pd.to_datetime(df['INSPECTION DATE'])
 df = df.groupby(['INSPECTION DATE','CUISINE DESCRIPTION','CAMIS'], as_index=False)['SCORE'].mean()
 df = df.set_index('INSPECTION DATE')
@@ -71,7 +74,6 @@ app.layout = html.Div([
      Input('cuisine_two','value'),
      Input('cuisine_three','value')]
 )
-
 def build_graph(first_cuisine, second_cuisine, third_cuisine):
     dff=df[(df['CUISINE DESCRIPTION']==first_cuisine)|
            (df['CUISINE DESCRIPTION']==second_cuisine)|
@@ -79,9 +81,14 @@ def build_graph(first_cuisine, second_cuisine, third_cuisine):
     # print(dff[:5])
 
     fig = px.line(dff, x="INSPECTION DATE", y="SCORE", color='CUISINE DESCRIPTION', height=600)
-    fig.update_layout(yaxis={'title':'NEGATIVE POINT'},
-                      title={'text':'Restaurant Inspections in NYC',
-                      'font':{'size':28},'x':0.5,'xanchor':'center'})
+    fig.update_layout(
+        yaxis={'title':'NEGATIVE POINT'},
+        title={
+            'text':'Restaurant Inspections in NYC',
+            'font':{'size':28},
+            'x':0.5,
+            'xanchor':'center'
+        })
     return fig
 
 #---------------------------------------------------------------

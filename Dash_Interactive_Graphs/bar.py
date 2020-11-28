@@ -1,3 +1,6 @@
+"""
+https://www.youtube.com/watch?v=FuJOsZgo4nU
+"""
 # Bar charts are useful for displaying data that is classified into nominal or ordinal categories.
 # A bar chart uses bars to show comparisons between categories of data. A bar chart will always have two axis.
 # One axis will generally have numerical values, and the other will describe the types of categories being compared.
@@ -12,7 +15,7 @@ from dash.dependencies import Input, Output
 import plotly       #(version 4.4.1)
 import plotly.express as px
 
-df = pd.read_csv("Urban_Park_Ranger_Animal_Condition_Response.csv")
+df = pd.read_csv("Urban_Park_Ranger_Animal_Condition_Response.csv.gz", compression='gzip')
 
 #-------------------------------------------------------------------------------------
 # Drop rows w/ no animals found or calls w/ varied age groups

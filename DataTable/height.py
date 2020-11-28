@@ -48,7 +48,7 @@ app.layout = dash_table.DataTable(
 # Vertical Scroll (without Pagination)
 #-----------------------------------------------------------------------------
     page_action='none',     # render all of the data at once
-    style_table={'height': '300px', 'overflowY': 'auto'}
+    style_table={'height': '500px', 'overflowY': 'auto'}
 
     # If you have more than 1000 rows, your browswer will slow down. Therefore,
     # for over 1000 rows, use pagination as per examples below or virtualization
