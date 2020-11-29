@@ -49,7 +49,7 @@ app.layout = html.Div([
                          {'label': 'Animal Health', 'value': 'Animal Condition'},
                 ],
                 value='Animal Condition',
-                style={"width": "50%"}
+                #style={"width": "50%"}
             ),
         ]),
 
@@ -63,7 +63,7 @@ app.layout = html.Div([
                          {'label': 'Amount of Animals', 'value': 'Amount of Animals'},
                 ],
                 value='Time Spent on Site (hours)',
-                style={"width": "50%"}
+                #style={"width": "50%"}
             ),
         ]),
 
@@ -89,9 +89,9 @@ def update_graph(x_axis, y_axis):
             data_frame=dff,
             x=x_axis,
             y=y_axis,
-            title=y_axis+': by '+x_axis,
+            title=y_axis+' vs '+x_axis,
             # facet_col='Borough',
-            # color='Borough',
+            color='Borough',
             # barmode='group',
             )
 

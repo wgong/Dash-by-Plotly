@@ -1,3 +1,8 @@
+"""
+https://www.youtube.com/watch?v=aEz1-72PKwc
+
+Bootstrap - https://bootswatch.com/default/
+"""
 import dash
 import dash_bootstrap_components as dbc
 import dash_html_components as html
@@ -54,13 +59,18 @@ card_graph = dbc.Card(
 
 
 app.layout = html.Div([
+    # option 1 - Row
     dbc.Row([dbc.Col(card_main, width=3),
              dbc.Col(card_question, width=3),
              dbc.Col(card_graph, width=5)], justify="around"),  # justify="start", "center", "end", "between", "around"
 
+    # # option 2 - CardGroup
     # dbc.CardGroup([card_main, card_question, card_graph])   # attaches cards with equal width and height columns
+
+    # # option 3 - CardDeck
     # dbc.CardDeck([card_main, card_question, card_graph])    # same as CardGroup but with gutter in between cards
 
+    # # option 4 - CardColumns
     # dbc.CardColumns([                        # Cards organised into Masonry-like columns
     #         card_main,
     #         card_question,
@@ -74,7 +84,7 @@ app.layout = html.Div([
 
 @app.callback(
     Output("my_bar", "figure"),
-    [Input("user_choice", "value")]
+    Input("user_choice", "value")
 )
 def update_graph(value):
     fig = px.scatter(df.query("year=={}".format(str(value))), x="gdpPercap", y="lifeExp",

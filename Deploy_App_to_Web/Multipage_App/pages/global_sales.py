@@ -12,7 +12,7 @@ DATA_PATH = PATH.joinpath("../datasets").resolve()
 
 # owner: shivp Kaggle. Source: https://data.mendeley.com/datasets
 # dataset was modified. Original data: https://www.kaggle.com/shivkp/customer-behaviour
-dfg = pd.read_csv(DATA_PATH.joinpath("opsales.csv"))
+dfg = pd.read_csv(DATA_PATH.joinpath("opsales.csv.gz"), compression="gzip")
 
 layout = html.Div([
     html.H1('General Product Sales', style={"textAlign": "center"}),

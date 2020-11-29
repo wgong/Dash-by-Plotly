@@ -4,10 +4,10 @@ from dash.dependencies import Input, Output
 
 # Connect to main app.py file
 from app import app
-from app import server
+# from app import server
 
 # Connect to your app pages
-from apps import vgames, global_sales
+from pages import vgames, global_sales
 
 
 app.layout = html.Div([

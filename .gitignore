@@ -1,2 +1,4 @@
 *.gz
 .ipynb_checkpoints
+*.key.json
+__pycache__

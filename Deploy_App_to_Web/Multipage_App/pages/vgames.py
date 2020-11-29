@@ -1,3 +1,7 @@
+"""
+https://www.youtube.com/watch?v=RMBSQ6leonU
+"""
+
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
@@ -10,7 +14,7 @@ from app import app
 PATH = pathlib.Path(__file__).parent
 DATA_PATH = PATH.joinpath("../datasets").resolve()
 
-dfv = pd.read_csv(DATA_PATH.joinpath("vgsales.csv"))  # GregorySmith Kaggle
+dfv = pd.read_csv(DATA_PATH.joinpath("vgsales.csv.gz"), compression="gzip")  # GregorySmith Kaggle
 sales_list = ["North American Sales", "EU Sales", "Japan Sales", "Other Sales",	"World Sales"]
 
 
@@ -36,8 +40,8 @@ layout = html.Div([
 
 @app.callback(
     Output(component_id='my-bar', component_property='figure'),
-    [Input(component_id='genre-dropdown', component_property='value'),
-     Input(component_id='sales-dropdown', component_property='value')]
+    Input(component_id='genre-dropdown', component_property='value'),
+    Input(component_id='sales-dropdown', component_property='value')
 )
 def display_value(genre_chosen, sales_chosen):
     dfv_fltrd = dfv[dfv['Genre'] == genre_chosen]

@@ -1,3 +1,7 @@
+"""
+https://youtu.be/X3OuhqS8ueM
+"""
+
 import dash
 import dash_bootstrap_components as dbc
 import dash_html_components as html
@@ -6,7 +10,7 @@ import plotly.express as px
 from dash.dependencies import Input, Output, State
 import pandas as pd
 
-df = pd.read_csv("Berlin_crimes.csv")
+df = pd.read_csv("Berlin_crimes.csv.gz", compression='gzip')
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP]) # https://bootswatch.com/default/
 
@@ -69,7 +73,7 @@ image_card = dbc.Card(
         dbc.CardBody(
             [
                 html.H4("The Lovely City of Berlin", className="card-title"),
-                dbc.CardImg(src="/assets/berlinwall.jpg", title="Graffiti by Gabriel Heimler"),
+                dbc.CardImg(src="./assets/berlinwall.jpg", title="Graffiti by Gabriel Heimler"),
                 html.H6("Choose Berlin Districts:", className="card-text"),
                 html.Div(id="the_alert", children=[]),
                 dcc.Dropdown(id='district_chosen', options=[{'label': d, "value": d} for d in df["District"].unique()],
@@ -139,8 +143,12 @@ def update_graph_card(districts):
     else:
         df_filtered = df[df["District"].isin(districts)]
         df_filtered = df_filtered.groupby(["Year", "District"])[['Graffiti']].median().reset_index()
-        fig = px.line(df_filtered, x="Year", y="Graffiti", color="District",
-                      labels={"Graffiti": "Graffiti incidents (avg)"}).update_traces(mode='lines+markers')
+        fig = px.line(df_filtered, 
+                x="Year", 
+                y="Graffiti", 
+                color="District",
+                labels={"Graffiti": "Graffiti incidents (avg)"})\
+                .update_traces(mode='lines+markers')
         return fig, dash.no_update
 
 
@@ -156,4 +164,4 @@ def toggle_modal(n1, n2, is_open):
 
 
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run_server(debug=True, port=8081)

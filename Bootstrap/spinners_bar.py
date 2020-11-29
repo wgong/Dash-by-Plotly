@@ -1,3 +1,6 @@
+"""
+https://youtu.be/t1bKNj021do
+"""
 import dash  # pip install dash
 import dash_html_components as html
 import dash_core_components as dcc
@@ -6,7 +9,7 @@ import plotly.express as px
 import dash_bootstrap_components as dbc  # pip install dash-bootstrap-components
 import pandas as pd  # pip install pandas
 
-df = pd.read_csv("green_tripdata_2019-01.csv")
+df = pd.read_csv("green_tripdata_2019-01.csv.gz", compression='gzip')
 df = df[df["total_amount"] > 0]
 df = df[:150000]
 
@@ -15,7 +18,11 @@ app = dash.Dash(__name__, external_stylesheets=[dbc.themes.LUMEN])  # https://bo
 app.layout = html.Div(
     children=[
         dbc.Row(dbc.Col(
-            dbc.Spinner(children=[dcc.Graph(id="loading-output")], size="lg", color="primary", type="border", fullscreen=True,),
+            dbc.Spinner(children=[dcc.Graph(id="loading-output")], 
+            size="lg", 
+            color="primary", 
+            type="border", 
+            fullscreen=True,),
             # spinner_style={"width": "10rem", "height": "10rem"}),
             # spinnerClassName="spinner"),
             # dcc.Loading(children=[dcc.Graph(id="loading-output")], color="#119DFF", type="dot", fullscreen=True,),
@@ -40,7 +47,8 @@ app.layout = html.Div(
 
 @app.callback(
     Output("loading-output", "figure"),
-    [Input("loading-button", "n_clicks")], [State("passenger_count", "value")]
+    [Input("loading-button", "n_clicks")], 
+    [State("passenger_count", "value")]
 )
 def load_output(n_clicks, psg_num):
     if n_clicks:
@@ -52,4 +60,4 @@ def load_output(n_clicks, psg_num):
 
 
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run_server(debug=True, port=8081)

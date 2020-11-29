@@ -1,3 +1,7 @@
+"""
+https://www.youtube.com/watch?v=G8r2BB3GFVY
+"""
+
 import dash  # use Dash version 1.16.0 or higher for this app to work
 import dash_core_components as dcc
 import dash_html_components as html
@@ -10,35 +14,51 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 app.layout = html.Div([
-    dcc.Dropdown(id='dpdn2', value=['Germany','Brazil'], multi=True,
-                 options=[{'label': x, 'value': x} for x in
-                          df.country.unique()]),
+    dcc.Dropdown(
+        id='country_dropdown', 
+        value=['Germany','Brazil'], 
+        multi=True,
+        options=[{'label': x, 'value': x} for x in df.country.unique()]
+    ),
     html.Div([
-        dcc.Graph(id='pie-graph', figure={}, className='six columns'),
-        dcc.Graph(id='my-graph', figure={}, clickData=None, hoverData=None, # I assigned None for tutorial purposes. By defualt, these are None, unless you specify otherwise.
-                  config={
-                      'staticPlot': False,     # True, False
-                      'scrollZoom': True,      # True, False
-                      'doubleClick': 'reset',  # 'reset', 'autosize' or 'reset+autosize', False
-                      'showTips': False,       # True, False
-                      'displayModeBar': True,  # True, False, 'hover'
-                      'watermark': True,
-                      # 'modeBarButtonsToRemove': ['pan2d','select2d'],
-                        },
-                  className='six columns'
-                  )
+        dcc.Graph(
+            id='pie-graph', 
+            figure={}, 
+            className='six columns'
+        ),
+        dcc.Graph(
+            id='line-graph', 
+            figure={}, 
+            clickData=None, 
+            hoverData=None, # I assigned None for tutorial purposes. By defualt, these are None, unless you specify otherwise.
+            config={
+                'staticPlot': False,     # True, False
+                'scrollZoom': True,      # True, False
+                'doubleClick': 'reset',  # 'reset', 'autosize' or 'reset+autosize', False
+                'showTips': False,       # True, False
+                'displayModeBar': True,  # True, False, 'hover'
+                'watermark': True,
+                # 'modeBarButtonsToRemove': ['pan2d','select2d'],
+                },
+            className='six columns'
+        )
     ])
 ])
 
 
 @app.callback(
-    Output(component_id='my-graph', component_property='figure'),
-    Input(component_id='dpdn2', component_property='value'),
+    Output(component_id='line-graph', component_property='figure'),
+    Input(component_id='country_dropdown', component_property='value'),
 )
 def update_graph(country_chosen):
     dff = df[df.country.isin(country_chosen)]
-    fig = px.line(data_frame=dff, x='year', y='gdpPercap', color='country',
-                  custom_data=['country', 'continent', 'lifeExp', 'pop'])
+    fig = px.line(
+            data_frame=dff, 
+            x='year', 
+            y='gdpPercap', 
+            color='country',
+            custom_data=['country', 'continent', 'lifeExp', 'pop']
+        )
     fig.update_traces(mode='lines+markers')
     return fig
 
@@ -46,10 +66,10 @@ def update_graph(country_chosen):
 # Dash version 1.16.0 or higher
 @app.callback(
     Output(component_id='pie-graph', component_property='figure'),
-    Input(component_id='my-graph', component_property='hoverData'),
-    Input(component_id='my-graph', component_property='clickData'),
-    Input(component_id='my-graph', component_property='selectedData'),
-    Input(component_id='dpdn2', component_property='value')
+    Input(component_id='line-graph', component_property='hoverData'),
+    Input(component_id='line-graph', component_property='clickData'),
+    Input(component_id='line-graph', component_property='selectedData'),
+    Input(component_id='country_dropdown', component_property='value')
 )
 def update_side_graph(hov_data, clk_data, slct_data, country_chosen):
     if hov_data is None:
