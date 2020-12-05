@@ -1,4 +1,9 @@
+"""
+https://www.youtube.com/watch?v=dgV3GGFMcTc
 
+
+
+"""
 
 import pandas as pd     #(version 1.0.0)
 import plotly           #(version 4.5.4) pip install plotly==4.5.4
@@ -45,11 +50,11 @@ app.layout = html.Div([
             # virtualization=False,
             style_cell_conditional=[
                 {'if': {'column_id': 'countriesAndTerritories'},
-                 'width': '40%', 'textAlign': 'left'},
+                 'width': '50%', 'textAlign': 'left'},
                 {'if': {'column_id': 'deaths'},
-                 'width': '30%', 'textAlign': 'left'},
+                 'width': '22%', 'textAlign': 'right'},
                 {'if': {'column_id': 'cases'},
-                 'width': '30%', 'textAlign': 'left'},
+                 'width': '22%', 'textAlign': 'right'},
             ],
         ),
     ],className='row'),
@@ -97,17 +102,17 @@ app.layout = html.Div([
 
 #------------------------------------------------------------------
 @app.callback(
-    [Output('piechart', 'figure'),
-     Output('linechart', 'figure')],
-    [Input('datatable_id', 'selected_rows'),
-     Input('piedropdown', 'value'),
-     Input('linedropdown', 'value')]
+    Output('piechart', 'figure'),
+    Output('linechart', 'figure'),
+    Input('datatable_id', 'selected_rows'),
+    Input('piedropdown', 'value'),
+    Input('linedropdown', 'value')
 )
 def update_data(chosen_rows,piedropval,linedropval):
     if len(chosen_rows)==0:
-        df_filterd = dff[dff['countriesAndTerritories'].isin(['China','Iran','Spain','Italy'])]
+        df_filterd = dff[dff['countriesAndTerritories'].isin(['China','United_States_of_America','Italy'])]
     else:
-        print(chosen_rows)
+        # print(chosen_rows)
         df_filterd = dff[dff.index.isin(chosen_rows)]
 
     pie_chart=px.pie(

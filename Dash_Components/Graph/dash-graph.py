@@ -1,5 +1,12 @@
 """
 https://www.youtube.com/watch?v=G8r2BB3GFVY
+
+Component - Graph
+- https://dash.plotly.com/dash-core-components/graph
+
+Line chart:
+- https://plotly.com/python/line-charts/
+
 """
 
 import dash  # use Dash version 1.16.0 or higher for this app to work
@@ -57,13 +64,14 @@ def update_graph(country_chosen):
             x='year', 
             y='gdpPercap', 
             color='country',
+            title="GDP per Capital",
             custom_data=['country', 'continent', 'lifeExp', 'pop']
         )
     fig.update_traces(mode='lines+markers')
     return fig
 
 
-# Dash version 1.16.0 or higher
+# Dash version 1.16.0 or higher (no need for list [])
 @app.callback(
     Output(component_id='pie-graph', component_property='figure'),
     Input(component_id='line-graph', component_property='hoverData'),
@@ -75,7 +83,7 @@ def update_side_graph(hov_data, clk_data, slct_data, country_chosen):
     if hov_data is None:
         dff2 = df[df.country.isin(country_chosen)]
         dff2 = dff2[dff2.year == 1952]
-        print(dff2)
+        # print(dff2)
         fig2 = px.pie(data_frame=dff2, values='pop', names='country',
                       title='Population for 1952')
         return fig2
