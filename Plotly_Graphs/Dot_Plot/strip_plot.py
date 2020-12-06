@@ -5,9 +5,13 @@ import plotly           #(version 4.5.4) #pip install plotly==4.5.4
 import plotly.express as px
 import plotly.io as pio
 
+
+from pathlib import Path
+filename = "~/projects/Dash-by-Plotly/Dataset/suicide_rates.csv.gz"
+data_path = Path(filename)
+df = pd.read_csv(data_path, compression='gzip')
 #--------------------------------------------------------------------------------------------
 # Filter Data
-df = pd.read_csv("suicide_rates.csv")
 mapping = {'G.I. Generation':'G.I. Generation 1901-1927','Silent':"Silent 28'-45'",
            "Boomers":"Boomers 46'-64'","Generation X":"Generation X 65'-80'",
            "Millenials":"Millenials 81'-96'","Generation Z":"Generation Z 96'-2012"}

@@ -1,3 +1,11 @@
+"""
+https://www.youtube.com/watch?v=4gDwKYaA6ww
+
+
+https://dash.plotly.com/pattern-matching-callbacks
+"""
+
+
 import dash  # version 1.13.1
 import dash_core_components as dcc
 import dash_html_components as html
@@ -6,7 +14,10 @@ import plotly.express as px
 import pandas as pd
 import numpy as np
 
-df = pd.read_csv("Caste.csv")
+from pathlib import Path
+filename = "~/projects/Dash-by-Plotly/Dataset/Caste.csv.gz"
+data_path = Path(filename)
+df = pd.read_csv(data_path, compression='gzip')
 df.rename(columns={'under_trial': 'under trial', 'state_name': 'state'}, inplace=True)
 
 app = dash.Dash(__name__)
@@ -47,7 +58,7 @@ def display_graphs(n_clicks, div_children):
             ),
             dcc.Dropdown(
                 id={
-                    'type': 'dynamic-dpn-s',
+                    'type': 'dynamic-dpn-state',
                     'index': n_clicks
                 },
                 options=[{'label': s, 'value': s} for s in np.sort(df['state'].unique())],
@@ -80,24 +91,25 @@ def display_graphs(n_clicks, div_children):
 
 @app.callback(
     Output({'type': 'dynamic-graph', 'index': MATCH}, 'figure'),
-    [Input(component_id={'type': 'dynamic-dpn-s', 'index': MATCH}, component_property='value'),
+    [Input(component_id={'type': 'dynamic-dpn-state', 'index': MATCH}, component_property='value'),
      Input(component_id={'type': 'dynamic-dpn-ctg', 'index': MATCH}, component_property='value'),
      Input(component_id={'type': 'dynamic-dpn-num', 'index': MATCH}, component_property='value'),
-     Input({'type': 'dynamic-choice', 'index': MATCH}, 'value')]
+     Input({'type': 'dynamic-choice', 'index': MATCH}, 'value')]   # shorthand w/o key, only value
 )
 def update_graph(s_value, ctg_value, num_value, chart_choice):
     print(s_value)
     dff = df[df['state'].isin(s_value)]
+    selected_columns = ['detenues', 'under trial', 'convicts', 'others']
 
     if chart_choice == 'bar':
-        dff = dff.groupby([ctg_value], as_index=False)[['detenues', 'under trial', 'convicts', 'others']].sum()
+        dff = dff.groupby([ctg_value], as_index=False)[selected_columns].sum()
         fig = px.bar(dff, x=ctg_value, y=num_value)
         return fig
     elif chart_choice == 'line':
         if len(s_value) == 0:
             return {}
         else:
-            dff = dff.groupby([ctg_value, 'year'], as_index=False)[['detenues', 'under trial', 'convicts', 'others']].sum()
+            dff = dff.groupby([ctg_value, 'year'], as_index=False)[selected_columns].sum()
             fig = px.line(dff, x='year', y=num_value, color=ctg_value)
             return fig
     elif chart_choice == 'pie':

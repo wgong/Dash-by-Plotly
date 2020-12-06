@@ -10,17 +10,20 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 
-app = dash.Dash(__name__)
-
 #---------------------------------------------------------------
+from pathlib import Path
+filename = "~/projects/Dash-by-Plotly/Dataset/DOHMH_New_York_City_Restaurant_Inspection_Results.csv.gz"
+data_path = Path(filename)
+df = pd.read_csv(data_path, compression='gzip')
 
-df = pd.read_csv("DOHMH_New_York_City_Restaurant_Inspection_Results.csv.gz", compression='gzip')
 df['INSPECTION DATE'] = pd.to_datetime(df['INSPECTION DATE'])
 df = df.groupby(['INSPECTION DATE','CUISINE DESCRIPTION','CAMIS'], as_index=False)['SCORE'].mean()
 df = df.set_index('INSPECTION DATE')
 df = df.loc['2016-01-01':'2019-12-31']
 df = df.groupby([pd.Grouper(freq="M"),'CUISINE DESCRIPTION'])['SCORE'].mean().reset_index()
 # print (df[:5])
+
+app = dash.Dash(__name__)
 
 #---------------------------------------------------------------
 app.layout = html.Div([
@@ -70,9 +73,9 @@ app.layout = html.Div([
 
 @app.callback(
     Output('our_graph','figure'),
-    [Input('cuisine_one','value'),
-     Input('cuisine_two','value'),
-     Input('cuisine_three','value')]
+    Input('cuisine_one','value'),
+    Input('cuisine_two','value'),
+    Input('cuisine_three','value')
 )
 def build_graph(first_cuisine, second_cuisine, third_cuisine):
     dff=df[(df['CUISINE DESCRIPTION']==first_cuisine)|
@@ -80,7 +83,12 @@ def build_graph(first_cuisine, second_cuisine, third_cuisine):
            (df['CUISINE DESCRIPTION']==third_cuisine)]
     # print(dff[:5])
 
-    fig = px.line(dff, x="INSPECTION DATE", y="SCORE", color='CUISINE DESCRIPTION', height=600)
+    fig = px.line(dff, 
+            x="INSPECTION DATE", 
+            y="SCORE", 
+            color='CUISINE DESCRIPTION', 
+            height=600
+        )
     fig.update_layout(
         yaxis={'title':'NEGATIVE POINT'},
         title={

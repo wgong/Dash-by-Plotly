@@ -5,8 +5,12 @@ from dash.dependencies import Input, Output
 import pandas as pd
 import plotly.express as px
 
+from pathlib import Path
+filename = "~/projects/Dash-by-Plotly/Dataset/social_capital.csv.gz"
+data_path = Path(filename)
+df = pd.read_csv(data_path, compression='gzip')
+
 # Data from U.S. Congress, Joint Economic Committee, Social Capital Project.
-df = pd.read_csv('social_capital.csv')
 df.drop(['Alt FIPS Code','FIPS Code','State Abbreviation'], axis=1, inplace=True)
 
 
@@ -46,7 +50,7 @@ def update_graph(dpdn_val):
     if len(dpdn_val) > 0:
         fig = px.scatter_matrix(df, dimensions=dpdn_val, color='population',
                                 hover_data={'State':True, 'population':':,'})
-        fig.update_traces(diagonal_visible=False, showupperhalf=True, showlowerhalf=True)
+        fig.update_traces(diagonal_visible=False, showupperhalf=True, showlowerhalf=False)
         fig.update_layout(yaxis1={'title':{'font':{'size':3}}}, yaxis2={'title':{'font':{'size':3}}},
                           yaxis3={'title':{'font':{'size':3}}}, yaxis4={'title':{'font':{'size':3}}},
                           yaxis5={'title':{'font':{'size':3}}}, yaxis6={'title':{'font':{'size':3}}},

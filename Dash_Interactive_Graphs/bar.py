@@ -15,7 +15,10 @@ from dash.dependencies import Input, Output
 import plotly       #(version 4.4.1)
 import plotly.express as px
 
-df = pd.read_csv("Urban_Park_Ranger_Animal_Condition_Response.csv.gz", compression='gzip')
+from pathlib import Path
+filename = "~/projects/Dash-by-Plotly/Dataset/Urban_Park_Ranger_Animal_Condition_Response.csv.gz"
+data_path = Path(filename)
+df = pd.read_csv(data_path, compression='gzip')
 
 #-------------------------------------------------------------------------------------
 # Drop rows w/ no animals found or calls w/ varied age groups

@@ -6,7 +6,10 @@ import dash_html_components as html
 from dash.dependencies import Input, Output
 import plotly.express as px #(need to pip install plotly==4.4.1)
 
-df = pd.read_csv("Urban_Park_Ranger_Animal_Condition_Response.csv")
+from pathlib import Path
+filename = "~/projects/Dash-by-Plotly/Dataset/Urban_Park_Ranger_Animal_Condition_Response.csv.gz"
+data_path = Path(filename)
+df = pd.read_csv(data_path, compression='gzip')
 
 # you need to include __name__ in your Dash constructor if
 # you plan to use a custom CSS or JavaScript in your Dash apps

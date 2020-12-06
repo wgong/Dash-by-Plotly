@@ -10,8 +10,12 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 
+from pathlib import Path
+filename = "~/projects/Dash-by-Plotly/Dataset/Mutual-Funds.csv.gz"
+data_path = Path(filename)
+df = pd.read_csv(data_path, compression='gzip')
 # Data source https://finance.yahoo.com  -Data owner: Stefano Leone on Kaggle
-df = pd.read_csv("Mutual-Funds.csv")
+
 
 colors = ["black", "blue", "red", "yellow", "pink", "orange"]
 
@@ -19,15 +23,24 @@ app = dash.Dash(__name__)
 
 app.layout = html.Div(
     children=[
-        dcc.Dropdown(id='my-dropdown', multi=True,
-                     options=[{'label': x, 'value': x} for x in sorted(df.fund_extended_name.unique())],
-                     value=["Fidelity 500 Index Fund", "Fidelity Advisor Freedom 2035 Fund Class A",
-                            "Fidelity Freedom 2035 Fund"]),
+        dcc.Dropdown(
+            id='my-dropdown', 
+            multi=True,
+            options=[{'label': x, 'value': x} 
+                        for x in sorted(df.fund_extended_name.unique())
+                    ],
+            value=["Fidelity 500 Index Fund", "Fidelity Advisor Freedom 2035 Fund Class A",
+                   "Fidelity Freedom 2035 Fund"]
+        ),
         html.Button(id='my-button', n_clicks=0, children="Show breakdown"),
         dcc.Graph(id='graph-output', figure={}),
 
         html.Div(id="sentence-output", children=["This is the color I love"], style={}),
-        dcc.RadioItems(id='my-radioitem', value="black", options=[{'label': c, 'value': c} for c in colors]),
+        dcc.RadioItems(
+            id='my-radioitem', 
+            value="black", 
+            options=[{'label': c, 'value': c} for c in colors]
+        ),
     ]
 )
 

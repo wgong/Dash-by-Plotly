@@ -9,7 +9,11 @@ import plotly.express as px
 import dash_bootstrap_components as dbc  # pip install dash-bootstrap-components
 import pandas as pd  # pip install pandas
 
-df = pd.read_csv("green_tripdata_2019-01.csv.gz", compression='gzip')
+from pathlib import Path
+filename = "~/projects/Dash-by-Plotly/Dataset/green_tripdata_2019-01.csv.gz"
+data_path = Path(filename)
+df = pd.read_csv(data_path, compression='gzip')
+
 df = df[df["total_amount"] > 0]
 df = df[:150000]
 
@@ -53,11 +57,18 @@ app.layout = html.Div(
 def load_output(n_clicks, psg_num):
     if n_clicks:
         dff = df[df["passenger_count"] == psg_num]
-        fig = px.histogram(dff, x="total_amount", title="NYC Green Taxi Rides").update_layout(title_x=0.5)
+        fig = px.histogram(
+            dff, 
+            x="total_amount", 
+            title="NYC Green Taxi Rides"
+        ).update_layout(title_x=0.5)
         return fig
-    return px.histogram(df.query(f"passenger_count=={psg_num}"), x="total_amount",
-                        title="NYC Green Taxi Rides").update_layout(title_x=0.5)
+    return px.histogram(
+            df.query(f"passenger_count=={psg_num}"), 
+            x="total_amount",
+            title="NYC Green Taxi Rides"
+        ).update_layout(title_x=0.5)
 
 
 if __name__ == "__main__":
-    app.run_server(debug=True, port=8081)
+    app.run_server(debug=True, port=8050)  # 8050 is default port

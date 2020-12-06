@@ -15,14 +15,20 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 
-app = dash.Dash(__name__)
-
+from pathlib import Path
+filename = "~/projects/Dash-by-Plotly/Dataset/COVID-19-geographic-disbtribution-worldwide-2020-03-29.xlsx"
+data_path = Path(filename)
+df = pd.read_csv(data_path)
 #---------------------------------------------------------------
 #Taken from https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases
-df = pd.read_excel("COVID-19-geographic-disbtribution-worldwide-2020-03-29.xlsx")
+df = pd.read_excel("")
 
 dff = df.groupby('countriesAndTerritories', as_index=False)[['deaths','cases']].sum()
 print (dff[:5])
+
+app = dash.Dash(__name__)
+
+
 #---------------------------------------------------------------
 app.layout = html.Div([
     html.Div([

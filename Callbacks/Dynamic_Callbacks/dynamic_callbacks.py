@@ -6,14 +6,20 @@ import plotly.express as px
 import pandas as pd
 import numpy as np
 
-df = pd.read_csv("Caste.csv")
+from pathlib import Path
+filename = "~/projects/Dash-by-Plotly/Dataset/Caste.csv.gz"
+data_path = Path(filename)
+df = pd.read_csv(data_path, compression='gzip')
 df.rename(columns={'under_trial': 'under trial', 'state_name': 'state'}, inplace=True)
 
 app = dash.Dash(__name__)
 
 app.layout = html.Div([
     html.Div(children=[
-        html.Button('Add Chart', id='add-chart', n_clicks=0),
+        html.Button('Add Chart', 
+            id='add-chart', 
+            n_clicks=0
+        ),
     ]),
     html.Div(id='container', children=[])
 ])

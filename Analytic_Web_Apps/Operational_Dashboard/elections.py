@@ -1,6 +1,9 @@
 """
 https://www.youtube.com/watch?v=my1nshz1uG4
 """
+
+
+
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
@@ -9,7 +12,10 @@ import dash_bootstrap_components as dbc
 import pandas as pd
 import plotly.express as px
 
-df = pd.read_csv("politics.csv.gz", compression="gzip")
+from pathlib import Path
+filename = "~/projects/Dash-by-Plotly/Dataset/politics.csv.gz"
+data_path = Path(filename)
+df = pd.read_csv(data_path, compression="gzip")
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 # server = app.server

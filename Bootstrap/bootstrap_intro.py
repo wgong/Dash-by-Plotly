@@ -13,10 +13,18 @@ from dash.dependencies import Input, Output
 import plotly.express as px
 import pandas as pd
 
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+from pathlib import Path
+
+filename = "~/projects/Dash-by-Plotly/Dataset/Berlin_crimes.csv.gz"
+data_path = Path(filename)
+df = pd.read_csv(data_path, compression='gzip')
 
 df = pd.read_csv("Berlin_crimes.csv.gz", compression='gzip')
+
 df = df.groupby('District')[['Street_robbery', 'Drugs']].median()
+
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+
 
 app.layout = html.Div([
         dbc.Row(dbc.Col(html.H3("Our Beautiful App Layout"),

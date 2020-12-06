@@ -8,7 +8,10 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
-# print(px.data.gapminder()[:15])
+
+df = px.data.gapminder()
+# print(df[:5])
+
 
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 
@@ -37,15 +40,14 @@ app.layout = html.Div([
     [Input(component_id='submit_button', component_property='n_clicks')],
     [State(component_id='input_state', component_property='value')]
 )
-
 def update_output(num_clicks, val_selected):
     if val_selected is None:
         raise PreventUpdate
     else:
-        df = px.data.gapminder().query("year=={}".format(val_selected))
-        # print(df[:3])
+        df_filtered = df.query("year=={}".format(val_selected))
+        # print(df_filtered[:3])
 
-        fig = px.choropleth(df, locations="iso_alpha",
+        fig = px.choropleth(df_filtered, locations="iso_alpha",
                             color="lifeExp",
                             hover_name="country",
                             projection='natural earth',
@@ -55,8 +57,9 @@ def update_output(num_clicks, val_selected):
         fig.update_layout(title=dict(font=dict(size=28),x=0.5,xanchor='center'),
                           margin=dict(l=60, r=60, t=50, b=50))
 
-        return ('The input value was "{}" and the button has been \
-                clicked {} times'.format(val_selected, num_clicks), fig)
+        msg = f'The input value was "{val_selected}" and the button has been \
+                clicked {num_clicks} times'
+        return msg, fig
 
 if __name__ == '__main__':
     app.run_server(debug=True)

@@ -1,10 +1,9 @@
-#------------------------------------------------------delete this section and add your own mapbox token below
-import yaml #(pip install pyyaml)
-with open("config.yml", 'r') as ymlfile:
-    cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
-mapbox_access_token = cfg['mysql']['key']
-#-------------------------------------------------------
-# mapbox_access_token = 'insert_your_mapbox_token_here'
+"""
+https://www.youtube.com/watch?v=7R7VMSLwooo
+
+
+https://plotly.com/python/reference/#scattermapbox
+"""
 
 import pandas as pd
 import numpy as np
@@ -17,7 +16,24 @@ from dash.dependencies import Input, Output
 import plotly.offline as py     #(version 4.4.1)
 import plotly.graph_objs as go
 
-df = pd.read_csv("finalrecycling.csv")
+import os.path
+from pathlib import Path
+filename = "~/projects/Dash-by-Plotly/Dataset/finalrecycling.csv.gz"
+data_path = Path(filename)
+df = pd.read_csv(data_path, compression='gzip')
+
+# #------------------------------------------------------delete this section and add your own mapbox token below
+# import yaml #(pip install pyyaml)
+# with open("config.yml", 'r') as ymlfile:
+#     cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
+# mapbox_access_token = cfg['mysql']['key']
+# #-------------------------------------------------------
+# mapbox_access_token = 'insert_your_mapbox_token_here'
+
+filename = "~/.mapbox"
+token_path = Path(os.path.expanduser(filename))
+with open(token_path) as f:
+    mapbox_access_token = f.read()
 
 app = dash.Dash(__name__)
 

@@ -3,9 +3,16 @@ import plotly           #(version 4.5.4) #pip install plotly==4.5.4
 import plotly.express as px
 import plotly.io as pio
 
+
+
+from pathlib import Path
+filename = "~/projects/Dash-by-Plotly/Dataset/Caste.csv.gz"
+data_path = Path(filename)
+df = pd.read_csv(data_path, compression='gzip')
+
 # excel sheet from https://www.kaggle.com/rajanand/prison-in-india/data
 # National Crime Records Bureau (NCRB), Govt of India has shared this dataset
-df = pd.read_csv("Caste.csv")
+
 df = df[df['state_name']=='Maharashtra']
 df = df.groupby(['year','gender',],as_index=False)[['detenues','under_trial','convicts','others']].sum()
 print (df[:5])

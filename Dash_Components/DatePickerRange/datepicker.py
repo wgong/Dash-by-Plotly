@@ -1,3 +1,11 @@
+"""
+https://www.youtube.com/watch?v=5uwxoxaPD8M
+
+https://dash.plotly.com/dash-core-components/datepickerrange
+https://plotly.com/python-api-reference/generated/plotly.express.density_mapbox.html#plotly.express.density_mapbox
+
+"""
+
 from datetime import datetime as dt
 import plotly.express as px
 import dash
@@ -6,8 +14,13 @@ import dash_core_components as dcc
 from dash.dependencies import Input, Output
 import pandas as pd
 
+from pathlib import Path
+filename = "~/projects/Dash-by-Plotly/Dataset/Sidewalk_Caf__Licenses_and_Applications.csv.gz"
+data_path = Path(filename)
+df = pd.read_csv(data_path, compression='gzip')
 # Data from NYC Open Data portal
-df = pd.read_csv('Sidewalk_Caf__Licenses_and_Applications.csv')
+
+
 df['SUBMIT_DATE'] = pd.to_datetime(df['SUBMIT_DATE'])
 df.set_index('SUBMIT_DATE', inplace=True)
 print(df[:5][['BUSINESS_NAME', 'LATITUDE', 'LONGITUDE', 'APP_SQ_FT']])
@@ -15,6 +28,8 @@ print(df[:5][['BUSINESS_NAME', 'LATITUDE', 'LONGITUDE', 'APP_SQ_FT']])
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+
+
 app.layout = html.Div([
     dcc.DatePickerRange(
         id='my-date-picker-range',  # ID to be used for callback
@@ -50,8 +65,8 @@ app.layout = html.Div([
 
 @app.callback(
     Output('mymap', 'figure'),
-    [Input('my-date-picker-range', 'start_date'),
-     Input('my-date-picker-range', 'end_date')]
+    Input('my-date-picker-range', 'start_date'),
+    Input('my-date-picker-range', 'end_date')
 )
 def update_output(start_date, end_date):
     # print("Start date: " + start_date)
@@ -59,10 +74,21 @@ def update_output(start_date, end_date):
     dff = df.loc[start_date:end_date]
     # print(dff[:5])
 
-    fig = px.density_mapbox(dff, lat='LATITUDE', lon='LONGITUDE', z='APP_SQ_FT', radius=13, zoom=10, height=650,
-                            center=dict(lat=40.751418, lon=-73.963878), mapbox_style="carto-positron",
-                            hover_data={'BUSINESS_NAME': True, 'LATITUDE': False, 'LONGITUDE': False,
-                                        'APP_SQ_FT': True})
+    fig = px.density_mapbox(
+            dff, 
+            lat='LATITUDE', 
+            lon='LONGITUDE', 
+            z='APP_SQ_FT', 
+            radius=13, 
+            zoom=10, 
+            height=650,
+            center=dict(lat=40.751418, lon=-73.963878), 
+            mapbox_style="carto-positron",
+            hover_data={'BUSINESS_NAME': True, 
+                        'LATITUDE': False, 
+                        'LONGITUDE': False,
+                        'APP_SQ_FT': True}
+        )
     return fig
 
 

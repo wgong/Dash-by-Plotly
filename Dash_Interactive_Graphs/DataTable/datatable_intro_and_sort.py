@@ -10,9 +10,14 @@ import dash_html_components as html
 import plotly.express as px
 import pandas as pd
 
+from pathlib import Path
+filename = "~/projects/Dash-by-Plotly/Dataset/internet_cleaned.csv.gz"
+data_path = Path(filename)
+df = pd.read_csv(data_path, compression='gzip')
+
 # -------------------------------------------------------------------------------------
 # Import the cleaned data (importing csv into pandas)
-df = pd.read_csv("internet_cleaned.csv")
+
 df = df[df['year'] == 2019]
 
 # Creating an ID column name gives us more interactive capabilities
