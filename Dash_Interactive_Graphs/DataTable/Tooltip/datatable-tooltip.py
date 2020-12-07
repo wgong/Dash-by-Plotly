@@ -1,8 +1,19 @@
+"""
+https://www.youtube.com/watch?v=bQgpC0_XKfI
+
+https://dash.plotly.com/datatable/tooltips
+"""
+
 import dash # Dash version 1.17.0
 import dash_table
 import pandas as pd # Pandas version 1.1.4
 
-df = pd.read_csv("https://raw.githubusercontent.com/Coding-with-Adam/Dash-by-Plotly/master/DataTable/Tooltip/medical_supplies_tooltip.csv")
+from pathlib import Path
+filename = "~/projects/Dash-by-Plotly/Dataset/medical_supplies_tooltip.csv.gz"
+data_path = Path(filename)
+df = pd.read_csv(data_path, compression='gzip')
+
+# df = pd.read_csv("https://raw.githubusercontent.com/Coding-with-Adam/Dash-by-Plotly/master/DataTable/Tooltip/medical_supplies_tooltip.csv")
 
 app = dash.Dash(__name__)
 

@@ -1,3 +1,8 @@
+"""
+https://www.youtube.com/watch?v=Zvz2LpziQAs
+
+
+"""
 import pandas as pd     #(version 1.0.0)
 import plotly           #(version 4.5.0)
 import plotly.express as px
@@ -7,17 +12,24 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 
-app = dash.Dash(__name__)
+
+from pathlib import Path
+filename = "~/projects/Dash-by-Plotly/Dataset/Border_Crossing_Entry_Data.csv.gz"
+data_path = Path(filename)
+df = pd.read_csv(data_path, compression='gzip')
+
 
 #---------------------------------------------------------------
 #Data found at https://www.kaggle.com/akhilv11/border-crossing-entry-data/data
 #The Bureau of Transportation Statistics (BTS) Border Crossing Data provide summary statistics
 #for inbound crossings at the U.S.-Canada and the U.S.-Mexico border at the port leve
 
-df = pd.read_csv("Border_Crossing_Entry_Data.csv")
+# df = pd.read_csv("Border_Crossing_Entry_Data.csv")
 df['Date'] = pd.to_datetime(df['Date'])
 df['Date'] = df['Date'].dt.year
 df = df.set_index('Date')
+
+app = dash.Dash(__name__)
 
 #---------------------------------------------------------------
 app.layout = html.Div([

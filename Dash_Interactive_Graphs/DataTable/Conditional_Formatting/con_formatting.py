@@ -8,7 +8,11 @@ import pandas as pd
 import plotly.express as px
 from table_bars import data_bars
 
-df = pd.read_csv('medical supplies.csv')
+from pathlib import Path
+filename = "~/projects/Dash-by-Plotly/Dataset/medical_supplies.csv.gz"
+data_path = Path(filename)
+df = pd.read_csv(data_path, compression='gzip')
+
 df["Part sent date"] = pd.to_datetime(df["Part sent date"]).dt.date
 df["Part received date"] = pd.to_datetime(df["Part received date"]).dt.date
 df['Prioritize'] = df['Machines'].apply(lambda x:

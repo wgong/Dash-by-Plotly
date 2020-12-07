@@ -10,8 +10,12 @@ from dash.dependencies import Input, Output
 app = dash.Dash(__name__)
 
 #---------------------------------------------------------------
+from pathlib import Path
+filename = "~/projects/Dash-by-Plotly/Dataset/Urban_Park_Ranger_Animal_Condition.csv.gz"
+data_path = Path(filename)
+df = pd.read_csv(data_path, compression='gzip')
+
 #Taken from https://opendata.cityofnewyork.us/
-df = pd.read_csv("Urban_Park_Ranger_Animal_Condition.csv")
 
 #---------------------------------------------------------------
 app.layout = html.Div([
